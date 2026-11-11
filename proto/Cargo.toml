@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 kf_core = { path = "../kf_core/" }
+tokio = { version = "1.54.1", features = ["full"] }

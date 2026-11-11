@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 proto = { path = "../proto/" }
 kf_core = { path = "../kf_core/" }
+bevy = "0.20.1"
