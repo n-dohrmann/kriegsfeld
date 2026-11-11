@@ -7,3 +7,14 @@ edition = "2024"
 proto = { path = "../proto/" }
 kf_core = { path = "../kf_core/" }
 bevy = "0.20.1"
+
+[features]
+# TODO - this will be a default feature before
+# client/server comms is worked out
+default = ["debug_standalone"]
+
+# allow server to run by itself (e.g. and allow
+# rendering without sending map info to a client)
+debug_standalone = []
+
+
