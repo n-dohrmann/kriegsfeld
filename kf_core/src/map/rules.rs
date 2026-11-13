@@ -1,11 +1,11 @@
-
-
 use crate::map::assets::SpawnableAsset;
 use crate::map::models::TerrainModelBuilder;
 use crate::map::sockets::*;
 use bevy_procedural_tilemaps::prelude::*;
 
-fn build_dirt_layer(
+const WATER_WEIGHT: f32 = 20.;
+
+fn build_water_layer(
     terrain_model_builder: &mut TerrainModelBuilder,
     terrain_socket: &TerrainSocket,
     socket_collection: &mut SocketCollection,
@@ -20,10 +20,29 @@ fn build_dirt_layer(
             },
             SpawnableAsset::new("water"),
         )
-        .with_weight(20.);
+        .with_weight(WATER_WEIGHT);
 
-    socket_collection.add_connections(vec![(
-        terrain_socket.0,
-        vec![terrain_socket.0],
-    )]);
+    socket_collection.add_connections(vec![(terrain_socket.0, vec![terrain_socket.0])]);
+}
+
+pub fn build_world() -> (
+    Vec<SpawnableAsset>,
+    ModelCollection<Cartesian2D>,
+    SocketCollection,
+) {
+    let mut socket_collection = SocketCollection::new();
+    let terrain_sockets = create_socket(&mut socket_collection);
+
+    let mut terrain_model_builder = TerrainModelBuilder::new();
+
+    // Build water layer
+    build_water_layer(
+        &mut terrain_model_builder,
+        &terrain_sockets,
+        &mut socket_collection,
+    );
+
+    let (assets, models) = terrain_model_builder.into_parts();
+
+    (assets, models, socket_collection)
 }
