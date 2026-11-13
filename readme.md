@@ -1,6 +1,8 @@
 # kriegsfeld
 
-more info tbd.
+Sample *Feld*:
+
+![sample](sample.png)
 
 ## Resources
 
