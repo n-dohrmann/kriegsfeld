@@ -4,7 +4,7 @@ use crate::map::sockets::*;
 use bevy_procedural_tilemaps::prelude::*;
 
 const WATER_WEIGHT: f32 = 30.;
-const PLAINS_WEIGHT: f32 = 30.;
+const PLAINS_WEIGHT: f32 = 35.;
 const TREES_WEIGHT: f32 = 25.;
 const MOUNTAINS_WEIGHT: f32 = 22.;
 
