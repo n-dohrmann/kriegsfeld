@@ -7,7 +7,7 @@ use crate::map::{
 };
 
 // world map size. change these as needed, not sure what looks/plays best
-pub const GRID_X: u32 = 25;
+pub const GRID_X: u32 = 28;
 pub const GRID_Y: u32 = 18;
 
 const ASSETS_PATH: &str = "assets";
@@ -17,12 +17,15 @@ pub const TILE_SIZE: f32 = 16.;
 
 // not sure if we want to scale this up or not.
 // how large assets get rendered compared to their source
-const ASSETS_MODIFIER: f32 = 3.0;
+const ASSETS_MODIFIER: f32 = 2.75;
 const ASSETS_SCALE: Vec3 = Vec3::new(ASSETS_MODIFIER, ASSETS_MODIFIER, 1.0);
 const NODE_SIZE: Vec3 = Vec3::new(ASSETS_MODIFIER * TILE_SIZE, ASSETS_MODIFIER * TILE_SIZE, 1.);
 
 pub fn map_pixel_dimensions() -> Vec2 {
-    Vec2::new(ASSETS_MODIFIER * TILE_SIZE * GRID_X as f32, ASSETS_MODIFIER * TILE_SIZE * GRID_Y as f32)
+    Vec2::new(
+        ASSETS_MODIFIER * TILE_SIZE * GRID_X as f32,
+        ASSETS_MODIFIER * TILE_SIZE * GRID_Y as f32,
+    )
 }
 
 pub fn setup_generator(
