@@ -96,8 +96,6 @@ pub fn setup_generator_inner(
     // 2. Grid - Create 3D world space with wrapping behavior (false, false, false)
     let grid = CartesianGrid::new_cartesian_2d(GRID_X, GRID_Y, false, false);
 
-    // let g = grid.default_grid_data();
-
     // 3. Configuring the Algorithm - Set up WFC behavior
     let gen_builder = GeneratorBuilder::new()
         .with_rules(rules)
@@ -111,16 +109,6 @@ pub fn setup_generator_inner(
         .with_model_heuristic(ModelSelectionHeuristic::WeightedProbability);
 
     let generator = gen_builder.build().unwrap();
-    // generator
-
-    // if let Err(e) = generator.set_and_propagate(
-    //     (GRID_X / 2, GRID_Y / 2),
-    //     models.models().nth(3).unwrap(),
-    //     false,
-    // ) {
-    //     println!("generator err: {:#?}", e);
-    //     return;
-    // }
 
     // 4. Loading Assets - Load sprite atlas and convert to renderable assets
     let tilemap_handles =
