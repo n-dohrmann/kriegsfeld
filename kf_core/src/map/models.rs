@@ -11,6 +11,12 @@ pub struct TerrainModelBuilder {
     pub assets: Vec<SpawnableAsset>,
 }
 
+impl Default for TerrainModelBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TerrainModelBuilder {
     pub fn new() -> Self {
         Self {
@@ -30,5 +36,12 @@ impl TerrainModelBuilder {
 
     pub fn into_parts(self) -> (Vec<SpawnableAsset>, ModelCollection<Cartesian2D>) {
         (self.assets, self.models)
+    }
+
+    // lookup corresponding model by asset name. small model count so
+    // linear search is fine...;
+    pub fn model_on_name(&self, name: &str) -> Option<&Model<Cartesian2D>> {
+        let idx = self.assets.iter().position(|a| a.sprite_name == name)?;
+        self.models.models().nth(idx)
     }
 }

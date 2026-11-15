@@ -1,10 +1,10 @@
 use crate::map::tilemap::TILEMAP;
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::prelude::*;
 use bevy_procedural_tilemaps::prelude::*;
 
 #[derive(Clone)]
 pub struct SpawnableAsset {
-    sprite_name: &'static str,
+    pub sprite_name: &'static str,
     // iff multi-tile assets are needed, add a grid
     // offset here. the current plan is for single
     // tile units only.

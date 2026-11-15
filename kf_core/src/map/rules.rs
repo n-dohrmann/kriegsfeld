@@ -3,10 +3,10 @@ use crate::map::models::TerrainModelBuilder;
 use crate::map::sockets::*;
 use bevy_procedural_tilemaps::prelude::*;
 
-const WATER_WEIGHT: f32 = 30.;
-const PLAINS_WEIGHT: f32 = 35.;
-const TREES_WEIGHT: f32 = 25.;
-const MOUNTAINS_WEIGHT: f32 = 22.;
+const WATER_WEIGHT: f32 = 35.;
+const PLAINS_WEIGHT: f32 = 25.;
+const TREES_WEIGHT: f32 = 20.;
+const MOUNTAINS_WEIGHT: f32 = 20.;
 
 fn build_layer(
     terrain_model_builder: &mut TerrainModelBuilder,
@@ -68,7 +68,11 @@ fn build_layer(
         ),
         (
             terrain_socket.plains,
-            vec![terrain_socket.water, terrain_socket.plains],
+            vec![
+                terrain_socket.water,
+                terrain_socket.plains,
+                terrain_socket.trees,
+            ],
         ),
         (
             terrain_socket.trees,
@@ -85,11 +89,7 @@ fn build_layer(
     ]);
 }
 
-pub fn build_world() -> (
-    Vec<SpawnableAsset>,
-    ModelCollection<Cartesian2D>,
-    SocketCollection,
-) {
+pub fn build_world() -> (TerrainModelBuilder, SocketCollection) {
     let mut socket_collection = SocketCollection::new();
     let terrain_sockets = create_socket(&mut socket_collection);
 
@@ -102,7 +102,5 @@ pub fn build_world() -> (
         &mut socket_collection,
     );
 
-    let (assets, models) = terrain_model_builder.into_parts();
-
-    (assets, models, socket_collection)
+    (terrain_model_builder, socket_collection)
 }
