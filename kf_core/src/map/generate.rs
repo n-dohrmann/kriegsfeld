@@ -41,28 +41,19 @@ pub fn map_pixel_dimensions() -> Vec2 {
 type BoundaryNodes = Vec<((u32, u32), Model<Cartesian2D>)>;
 
 fn boundary_nodes(terrain: &TerrainModelBuilder) -> Result<BoundaryNodes, &'static str> {
-    let err = "asset not found!";
+    let mountains = terrain
+        .model_on_name("mountains")
+        .ok_or("mountains model not found!")?
+        .clone();
+    let water = terrain
+        .model_on_name("water")
+        .ok_or("water model not found!")?;
     let nodes = vec![
-        (
-            GRID_CENTER,
-            terrain.model_on_name("mountains").ok_or(err)?.clone(),
-        ),
-        (
-            NORTH_EAST,
-            terrain.model_on_name("water").ok_or(err)?.clone(),
-        ),
-        (
-            SOUTH_WEST,
-            terrain.model_on_name("water").ok_or(err)?.clone(),
-        ),
-        (
-            SOUTH_EAST,
-            terrain.model_on_name("water").ok_or(err)?.clone(),
-        ),
-        (
-            NORTH_WEST,
-            terrain.model_on_name("water").ok_or(err)?.clone(),
-        ),
+        (GRID_CENTER, mountains),
+        (NORTH_EAST, water.clone()),
+        (SOUTH_WEST, water.clone()),
+        (SOUTH_EAST, water.clone()),
+        (NORTH_WEST, water.clone()),
     ];
     Ok(nodes)
 }
