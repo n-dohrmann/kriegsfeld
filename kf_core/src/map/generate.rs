@@ -17,6 +17,8 @@ pub const NORTH_EAST: (u32, u32) = ((GRID_X - 1), (GRID_Y - 1));
 pub const SOUTH_WEST: (u32, u32) = (0, 0);
 pub const SOUTH_EAST: (u32, u32) = ((GRID_X - 1), 0);
 pub const GRID_CENTER: (u32, u32) = (GRID_X / 2, GRID_Y / 2);
+pub const WEST_CENTER: (u32, u32) = (0, GRID_Y / 2);
+pub const EAST_CENTER: (u32, u32) = ((GRID_X - 1), GRID_Y / 2);
 
 const ASSETS_PATH: &str = "assets";
 const TILEMAP_FILE: &str = "tiles.png";
@@ -50,6 +52,8 @@ fn boundary_nodes(terrain: &TerrainModelBuilder) -> Result<BoundaryNodes, &'stat
         .ok_or("water model not found!")?;
     let nodes = vec![
         (GRID_CENTER, mountains),
+        (WEST_CENTER, water.clone()),
+        (EAST_CENTER, water.clone()),
         (NORTH_EAST, water.clone()),
         (SOUTH_WEST, water.clone()),
         (SOUTH_EAST, water.clone()),
@@ -91,8 +95,6 @@ pub fn setup_generator_inner(
     let gen_builder = GeneratorBuilder::new()
         .with_rules(rules)
         .with_grid(grid.clone())
-        // .with_initial_grid::<ModelInstance>(g)
-        // .map_err(|e| e.to_string())?
         .with_initial_nodes(init_nodes)
         .map_err(|e| e.to_string())?
         .with_rng(RngMode::RandomSeed)

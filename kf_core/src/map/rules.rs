@@ -3,10 +3,10 @@ use crate::map::models::TerrainModelBuilder;
 use crate::map::sockets::*;
 use bevy_procedural_tilemaps::prelude::*;
 
-const WATER_WEIGHT: f32 = 30.;
-const PLAINS_WEIGHT: f32 = 25.;
-const TREES_WEIGHT: f32 = 15.;
-const MOUNTAINS_WEIGHT: f32 = 15.;
+const WATER_WEIGHT: f32 = 20.;
+const PLAINS_WEIGHT: f32 = 30.;
+const TREES_WEIGHT: f32 = 30.;
+const MOUNTAINS_WEIGHT: f32 = 20.;
 
 fn build_layer(
     terrain_model_builder: &mut TerrainModelBuilder,
