@@ -1,4 +1,7 @@
 use bevy::prelude::*;
+use bevy::ui_widgets::{Activate, Button};
+
+use crate::states::GameState;
 
 #[derive(Component)]
 pub struct MainMenu;
@@ -35,17 +38,24 @@ pub fn spawn_main_menu(mut commands: Commands) {
                 },
                 TextColor::WHITE,
             ));
-
-            parent.spawn((
-                StartButton,
-                Text::new("start"),
-                TextFont {
-                    font_size: FontSize::Px(32.),
-                    ..default()
-                },
-                TextColor(Color::srgb(1., 0.2, 0.2)),
-                BackgroundColor(Color::srgb(0.1, 0.1, 0.15)),
-            ));
+            parent
+                .spawn((
+                    StartButton,
+                    Button,
+                    Text::new("start"),
+                    TextFont {
+                        font_size: FontSize::Px(32.),
+                        ..default()
+                    },
+                    TextColor(Color::srgb(1., 0.2, 0.2)),
+                    BackgroundColor(Color::srgb(0.1, 0.1, 0.15)),
+                ))
+                .observe(
+                    // you can add any params you might add to a regular function!
+                    |_on_click: On<Activate>, mut next_state: ResMut<NextState<GameState>>| {
+                        next_state.set(GameState::Generate);
+                    },
+                );
         });
 }
 

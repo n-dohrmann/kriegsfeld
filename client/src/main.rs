@@ -13,7 +13,7 @@ fn main() {
     let map_size = map_pixel_dimensions();
 
     App::new()
-        .insert_resource(ClearColor(Color::WHITE))
+        .insert_resource(ClearColor(Color::srgb(0.1, 0.1, 0.15)))
         .add_plugins(
             DefaultPlugins
                 .set(AssetPlugin {
