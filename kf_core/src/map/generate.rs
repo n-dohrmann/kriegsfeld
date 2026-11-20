@@ -1,11 +1,19 @@
 use bevy::prelude::*;
 use bevy_procedural_tilemaps::prelude::*;
+use bevy_procedural_tilemaps::proc_gen::generator::Generator;
+use bevy_procedural_tilemaps::proc_gen::grid::{Cartesian2D, CartesianGrid};
 
 use crate::map::{
     assets::{load_assets, prepare_tilemap_handles},
     models::TerrainModelBuilder,
     rules::build_world,
 };
+
+type GeneratorMarker = Generator<Cartesian2D, CartesianGrid<Cartesian2D>>;
+
+// marker component for map generation
+#[derive(Component)]
+pub struct MapGenerator;
 
 // world map size. change these as needed, not sure what looks/plays best
 pub const GRID_X: u32 = 28;
@@ -72,6 +80,12 @@ pub fn setup_generator(
     }
 }
 
+pub fn despawn_generator(mut commands: Commands, query: Query<Entity, With<MapGenerator>>) {
+    for entity in query.iter() {
+        commands.entity(entity).despawn();
+    }
+}
+
 pub fn setup_generator_inner(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
@@ -110,6 +124,7 @@ pub fn setup_generator_inner(
 
     // 5. Spawning the Generator - Create entity with Transform and NodesSpawner
     commands.spawn((
+        MapGenerator,
         Transform::from_translation(Vec3 {
             x: -TILE_SIZE * grid.size_x() as f32 * ASSETS_MODIFIER / 2.,
             y: -TILE_SIZE * grid.size_y() as f32 * ASSETS_MODIFIER / 2.,
@@ -121,4 +136,42 @@ pub fn setup_generator_inner(
     ));
 
     Ok(())
+}
+
+pub trait GridPrinter {
+    fn print(&self) -> String;
+}
+
+impl GridPrinter for Generator<Cartesian2D, CartesianGrid<Cartesian2D>> {
+    fn print(&self) -> String {
+        // not sure if "grid" is what actually got generated...
+        // this is just the geometric data, not the actual node data,
+        // only has the size and looping constraints we passed in before
+        // calling generate
+        let grid = self.grid().to_string();
+
+        // think we want the "GenInfo" struct from this somehow
+        grid
+    }
+}
+
+#[derive(Resource, Default)]
+pub struct RunOnce(pub bool);
+
+impl RunOnce {
+    pub fn run_checked<F: FnOnce()>(&mut self, f: F) {
+        if self.0 {
+            return;
+        }
+        self.0 = true;
+        f();
+    }
+}
+
+pub fn print_grid_info(mut run: ResMut<RunOnce>, grid_info: Query<&GeneratorMarker>) {
+    run.run_checked(|| {
+        if let Ok(info) = grid_info.single() {
+            println!("Found grid:\n{}", info.print());
+        }
+    });
 }

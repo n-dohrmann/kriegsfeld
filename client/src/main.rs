@@ -6,31 +6,14 @@ use bevy::{
     window::{Window, WindowPlugin, WindowResolution},
 };
 
-use kf_core::bevy_procedural_tilemaps::prelude::*;
-use kf_core::map::{
-    GridPrinter,
-    generate::{map_pixel_dimensions, setup_generator},
-};
-
-#[derive(Resource, Default)]
-pub struct RunOnce(pub bool);
-
-impl RunOnce {
-    pub fn run_checked<F: FnOnce()>(&mut self, f: F) {
-        if self.0 {
-            return;
-        }
-        self.0 = true;
-        f();
-    }
-}
+use kf_core::map::generate::{map_pixel_dimensions, print_grid_info};
+use kf_core::{bevy_procedural_tilemaps::prelude::*, states::StatePlugin};
 
 fn main() {
     let map_size = map_pixel_dimensions();
 
     App::new()
         .insert_resource(ClearColor(Color::WHITE))
-        .insert_resource(RunOnce::default())
         .add_plugins(
             DefaultPlugins
                 .set(AssetPlugin {
@@ -49,22 +32,12 @@ fn main() {
         )
         // not sure if we should keep this as 2d or revert to 3d
         .add_plugins(ProcGenSimplePlugin::<Cartesian2D, Sprite>::default())
-        .add_systems(Startup, (setup_camera, setup_generator))
+        .add_plugins(StatePlugin)
+        .add_systems(Startup, setup_camera)
         .add_systems(Update, print_grid_info)
         .run();
 }
 
 fn setup_camera(mut commands: Commands) {
     commands.spawn(Camera2d);
-}
-
-fn print_grid_info(
-    mut run: ResMut<RunOnce>,
-    grid_info: Query<&Generator<Cartesian2D, CartesianGrid<Cartesian2D>>>,
-) {
-    run.run_checked(|| {
-        if let Ok(info) = grid_info.single() {
-            println!("Found grid:\n{}", info.print());
-        }
-    });
 }
