@@ -1,6 +1,8 @@
+pub mod generate;
 pub mod main_menu;
 
 use crate::map::generate::{RunOnce, despawn_generator, print_grid_info, setup_generator};
+use crate::states::generate::check_exit;
 use bevy::prelude::*;
 
 #[derive(States, Default, Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -24,6 +26,7 @@ impl Plugin for StatePlugin {
                 OnEnter(GameState::Generate),
                 (setup_generator, print_grid_info).chain(),
             )
+            .add_systems(Update, check_exit.run_if(in_state(GameState::Generate)))
             .add_systems(OnExit(GameState::Generate), despawn_generator);
     }
 }
